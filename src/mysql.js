@@ -5,7 +5,7 @@ const pool = mysql.createPool({
   host: 'localhost',
   port: '3306',
   user: 'root',
-  password: '3203550cheng',
+  password: 'Cheng3203550)(',
   database: 'nitu_data'
 });
 class mysqlClass {
@@ -119,6 +119,19 @@ class mysqlClass {
       }else{
         SQL = 'SELECT id,front_img,type,title,content FROM article WHERE type='+parseInt(data);
       }
+      pool.query(SQL , (err,result)=>{
+        if(err){
+          console.log(err);
+        }
+        res(result);
+        return result;
+      })
+    })
+  }
+  getArticleIdList(){
+    return new Promise((res,rej)=>{
+      let SQL ='';
+      SQL = 'SELECT id FROM article';
       pool.query(SQL , (err,result)=>{
         if(err){
           console.log(err);

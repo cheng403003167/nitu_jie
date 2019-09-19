@@ -13,11 +13,11 @@ app.use(koaBody({
 app.use(bodyParser());
 const router = new Router();
 const mysql = new mysqlClass();
-router.get('/getBookType',async (ctx,next)=>{
+router.get('/api/getBookType',async (ctx,next)=>{
   let s = await mysql.getBookType();
   ctx.body = s;
 })
-router.post('/addBookType',async (ctx,next)=>{
+router.post('/api/addBookType',async (ctx,next)=>{
   let s = await mysql.addBookType(ctx.request.body.type);
   if(s.affectedRows>0){
     ctx.body = {addData: true}
@@ -25,7 +25,7 @@ router.post('/addBookType',async (ctx,next)=>{
     ctx.body = {addData: false}
   }
 })
-router.post('/delBookType',async (ctx,next)=>{
+router.post('/api/delBookType',async (ctx,next)=>{
   let s = await mysql.delBookType(ctx.request.body.id);
   if(s.affectedRows>0){
     ctx.body = {addData: true}
@@ -33,7 +33,7 @@ router.post('/delBookType',async (ctx,next)=>{
     ctx.body = {addData: false}
   }
 })
-router.post('/updateBookType',async (ctx,next)=>{
+router.post('/api/updateBookType',async (ctx,next)=>{
   let s = await mysql.updateBookType(ctx.request.body.id,ctx.request.body.type);
   if(s.affectedRows>0){
     ctx.body = {addData: true}
@@ -41,11 +41,11 @@ router.post('/updateBookType',async (ctx,next)=>{
     ctx.body = {addData: false}
   }
 })
-router.get('/getJokeType',async (ctx,next)=>{
+router.get('/api/getJokeType',async (ctx,next)=>{
   let s = await mysql.getJokeType();
   ctx.body = s;
 })
-router.post('/addJokeType',async (ctx,next)=>{
+router.post('/api/addJokeType',async (ctx,next)=>{
   let s = await mysql.addJokeType(ctx.request.body.type);
   if(s.affectedRows>0){
     ctx.body = {addData: true}
@@ -53,7 +53,7 @@ router.post('/addJokeType',async (ctx,next)=>{
     ctx.body = {addData: false}
   }
 })
-router.post('/delJokeType',async (ctx,next)=>{
+router.post('/api/delJokeType',async (ctx,next)=>{
   let s = await mysql.delJokeType(ctx.request.body.id);
   if(s.affectedRows>0){
     ctx.body = {addData: true}
@@ -61,7 +61,7 @@ router.post('/delJokeType',async (ctx,next)=>{
     ctx.body = {addData: false}
   }
 })
-router.post('/updateJokeType',async (ctx,next)=>{
+router.post('/api/updateJokeType',async (ctx,next)=>{
   let s = await mysql.updateJokeType(ctx.request.body.id,ctx.request.body.type);
   if(s.affectedRows>0){
     ctx.body = {addData: true}
@@ -69,7 +69,7 @@ router.post('/updateJokeType',async (ctx,next)=>{
     ctx.body = {addData: false}
   }
 })
-router.post('/imgFile',async (ctx) =>{
+router.post('/api/imgFile',async (ctx) =>{
   const file = ctx.request.files.file;
   var fileFormat = file.name.split('.');
   let newFile = Date.now() + '.' + fileFormat[fileFormat.length - 1];
@@ -77,7 +77,7 @@ router.post('/imgFile',async (ctx) =>{
   let result = await client.putStream('nitu/front/'+newFile,reader);
   ctx.body = result;
 })
-router.post('/imgList',async (ctx) =>{
+router.post('/api/imgList',async (ctx) =>{
   let marker = ctx.request.body.market || 'nitu/front/';
   let resultArr = [];
   async function getF(){
@@ -94,7 +94,7 @@ router.post('/imgList',async (ctx) =>{
   await getF();
   ctx.body = resultArr.reverse();
 })
-router.post('/articleCon',async (ctx) => {
+router.post('/api/articleCon',async (ctx) => {
   let data = ctx.request.body.forms;
   let result = await mysql.newArticle(data);
   if(result.affectedRows>0){
@@ -103,7 +103,7 @@ router.post('/articleCon',async (ctx) => {
     ctx.body = {addData: false}
   }
 })
-router.post('/articleConUpdate',async (ctx) => {
+router.post('/api/articleConUpdate',async (ctx) => {
   let data = ctx.request.body.forms;
   let arId = ctx.request.body.id;
   let result = await mysql.ArticleUpdate(data,arId);
@@ -113,7 +113,7 @@ router.post('/articleConUpdate',async (ctx) => {
     ctx.body = {addData: false}
   }
 })
-router.post('/getArticleList',async (ctx) =>{
+router.post('/api/getArticleList',async (ctx) =>{
   let data = ctx.request.body.arId;
   let result = await mysql.getArticleList(data);
   if(result.length>0){
@@ -122,7 +122,15 @@ router.post('/getArticleList',async (ctx) =>{
     ctx.body = {addData: false}
   }
 })
-router.post('/getArticleItem',async (ctx) =>{
+router.get('/api/getArticleIdList',async (ctx) =>{
+  let result = await mysql.getArticleIdList();
+  if(result.length>0){
+    ctx.body = result;
+  }else{
+    ctx.body = {addData: false}
+  }
+})
+router.post('/api/getArticleItem',async (ctx) =>{
   let data = ctx.request.body.id;
   let result = await mysql.getArticleItem(data);
   if(result.length>0){
@@ -131,7 +139,7 @@ router.post('/getArticleItem',async (ctx) =>{
     ctx.body = {addData: false}
   }
 })
-router.post('/getArticleListAndType',async (ctx) =>{
+router.post('/api/getArticleListAndType',async (ctx) =>{
   let data = ctx.request.body.arId;
   let result = await mysql.getArticleList(data);
   let s = await mysql.getBookType();
@@ -141,7 +149,7 @@ router.post('/getArticleListAndType',async (ctx) =>{
     ctx.body = {addData: false}
   }
 })
-router.post('/getArticleConAndType',async (ctx) =>{
+router.post('/api/getArticleConAndType',async (ctx) =>{
   let data = parseInt(ctx.request.body.arId);
   let result = await mysql.getArticleItem(data);
   let prevResult = await mysql.getArticleItemPrev(data);
@@ -153,7 +161,7 @@ router.post('/getArticleConAndType',async (ctx) =>{
     ctx.body = {addData: false}
   }
 })
-router.post('/getSearchArticleListAndType',async (ctx) =>{
+router.post('/api/getSearchArticleListAndType',async (ctx) =>{
   let data = ctx.request.body.search;
   let result = await mysql.getSearchArticleList();
   let tempArr = [];
