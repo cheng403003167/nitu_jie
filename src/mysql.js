@@ -131,7 +131,7 @@ class mysqlClass {
           return msg;
         };
         result.forEach(function(item) {
-          item.content = filterHTMLTag(item.content).slice(0, 90) + "...";
+          item.content = filterHTMLTag(item.content).slice(0, 30) + "...";
         });
         res(result);
         return result;
