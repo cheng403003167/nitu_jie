@@ -123,6 +123,16 @@ class mysqlClass {
         if(err){
           console.log(err);
         }
+        var filterHTMLTag = function(msg) {
+          var msg = msg.replace(/<\/?[^>]*>/g, "");
+          msg = msg.replace(/[|]*\n/, "");
+          msg = msg.replace(/&npsp;/gi, "");
+          msg = msg.replace(/&nbsp;/gi, "");
+          return msg;
+        };
+        result.forEach(function(item) {
+          item.content = filterHTMLTag(item.content).slice(0, 90) + "...";
+        });
         res(result);
         return result;
       })
