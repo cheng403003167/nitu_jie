@@ -5,7 +5,7 @@ const pool = mysql.createPool({
   host: 'localhost',
   port: '3306',
   user: 'root',
-  password: 'Cheng3203550)(',
+  password: 'root',
   database: 'nitu_data'
 });
 class mysqlClass {
@@ -155,7 +155,7 @@ class mysqlClass {
   }
   getArticleItemPrev(data){
     return new Promise((res,rej)=>{
-      let SQL = 'SELECT * FROM `article` WHERE `id` =(select max(id) from article where id<'+data+')';
+      let SQL = 'SELECT title FROM `article` WHERE `id` =(select max(id) from article where id<'+data+')';
       pool.query(SQL , (err,result)=>{
         if(err){
           console.log(err);
@@ -167,7 +167,7 @@ class mysqlClass {
   }
   getArticleItemNext(data){
     return new Promise((res,rej)=>{
-      let SQL = 'SELECT * FROM `article` WHERE `id` =(select min(id) from article where id>'+data+')';
+      let SQL = 'SELECT title FROM `article` WHERE `id` =(select min(id) from article where id>'+data+')';
       pool.query(SQL , (err,result)=>{
         if(err){
           console.log(err);
