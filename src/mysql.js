@@ -142,9 +142,9 @@ class mysqlClass {
     return new Promise((res,rej)=>{
       let SQL ='';
       if(!data){
-        SQL = 'SELECT COUNT(*) FROM article';
+        SQL = 'SELECT COUNT(*) AS leng FROM article';
       }else{
-        SQL = 'SELECT COUNT(*) FROM article WHERE type='+parseInt(data);
+        SQL = 'SELECT COUNT(*) AS leng FROM article WHERE type='+parseInt(data);
       }
       pool.query(SQL , (err,result)=>{
         if(err){
