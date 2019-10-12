@@ -111,7 +111,7 @@ class mysqlClass {
       })
     })
   }
-  getArticleList(data,startP,pages){
+  getArticleList(startP,pages,data){
     return new Promise((res,rej)=>{
       let SQL ='';
       if(!data){

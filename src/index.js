@@ -141,7 +141,7 @@ router.post('/api/getArticleItem',async (ctx) =>{
 })
 router.post('/api/getArticleListAndType',async (ctx) =>{
   let data = ctx.request.body.arId;
-  let pages = ctx.request.body.page;
+  let pages = ctx.request.body.page || 1;
   let leng = await mysql.getArticleLength(data);
   let lastId = leng + 5;
   let startP = 0;
@@ -150,7 +150,7 @@ router.post('/api/getArticleListAndType',async (ctx) =>{
   }else{
     startP = lastId + 1;
   }
-  let result = await mysql.getArticleList(data,startP,pages);
+  let result = await mysql.getArticleList(startP,pages,data);
   let s = await mysql.getBookType();
   if(result.length>0){
     ctx.body = {article_list:result,article_type:s,leng:leng[0].leng}
