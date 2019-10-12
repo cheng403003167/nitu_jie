@@ -117,7 +117,7 @@ class mysqlClass {
       if(!data){
         SQL = 'SELECT id,front_img,type,title,content FROM article ORDER BY id DESC LIMIT 5 ';
       }else{
-        SQL = 'SELECT id,front_img,type,title,content FROM article ORDER BY id DESC LIMIT 5 WHERE type='+parseInt(data);
+        SQL = 'SELECT id,front_img,type,title,content FROM article WHERE type='+parseInt(data)+' ORDER BY id DESC LIMIT 5';
       }
       pool.query(SQL , (err,result)=>{
         if(err){
