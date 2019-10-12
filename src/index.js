@@ -149,6 +149,15 @@ router.post('/api/getArticleListAndType',async (ctx) =>{
     ctx.body = {addData: false}
   }
 })
+router.post('/api/getArticleLength',async (ctx) =>{
+  let data = ctx.request.body.arId;
+  let result = await mysql.getArticleLength(data);
+  if(result.length>0){
+    ctx.body = result;
+  }else{
+    ctx.body = {addData: false}
+  }
+})
 router.post('/api/getArticleConAndType',async (ctx) =>{
   let data = parseInt(ctx.request.body.arId);
   let result = await mysql.getArticleItem(data);

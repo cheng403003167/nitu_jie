@@ -138,6 +138,23 @@ class mysqlClass {
       })
     })
   }
+  getArticleLength(data){
+    return new Promise((res,rej)=>{
+      let SQL ='';
+      if(!data){
+        SQL = 'SELECT COUNT(*) FROM article';
+      }else{
+        SQL = 'SELECT COUNT(*) FROM article WHERE type='+parseInt(data);
+      }
+      pool.query(SQL , (err,result)=>{
+        if(err){
+          console.log(err);
+        }
+        res(result);
+        return result;
+      })
+    })
+  }
   getArticleIdList(){
     return new Promise((res,rej)=>{
       let SQL ='';
