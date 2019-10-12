@@ -138,21 +138,6 @@ class mysqlClass {
       })
     })
   }
-  getArticleLength(data){
-    let SQL ='';
-    if(!data){
-      SQL = 'SELECT COUNT(*) AS leng FROM article';
-    }else{
-      SQL = 'SELECT COUNT(*) AS leng FROM article WHERE type='+parseInt(data);
-    }
-    pool.query(SQL , (err,result)=>{
-      if(err){
-        console.log(err);
-      }
-      res(result);
-      return result;
-    })
-  }
   getArticleIdList(){
     return new Promise((res,rej)=>{
       let SQL ='';
