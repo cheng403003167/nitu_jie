@@ -111,13 +111,13 @@ class mysqlClass {
       })
     })
   }
-  getArticleList(data){
+  getArticleList(data,startP,pages){
     return new Promise((res,rej)=>{
       let SQL ='';
       if(!data){
-        SQL = 'SELECT id,front_img,type,title,content FROM article ORDER BY id DESC LIMIT 5 ';
+        SQL = 'SELECT id,front_img,type,title,content FROM article WHERE id < '+startP+' ORDER BY id DESC LIMIT 5 ';
       }else{
-        SQL = 'SELECT id,front_img,type,title,content FROM article WHERE type='+parseInt(data)+' ORDER BY id DESC LIMIT 5';
+        SQL = 'SELECT id,front_img,type,title,content FROM article WHERE type='+parseInt(data)+' ORDER BY id DESC';
       }
       pool.query(SQL , (err,result)=>{
         if(err){
@@ -130,6 +130,9 @@ class mysqlClass {
           msg = msg.replace(/&nbsp;/gi, "");
           return msg;
         };
+        if(data){
+          result = result.slice((pages-1)*5,(pages-1)*5+5);
+        }
         result.forEach(function(item) {
           item.content = filterHTMLTag(item.content).slice(0, 90) + "...";
         });
