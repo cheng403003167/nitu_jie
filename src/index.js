@@ -142,9 +142,10 @@ router.post('/api/getArticleItem',async (ctx) =>{
 router.post('/api/getArticleListAndType',async (ctx) =>{
   let data = ctx.request.body.arId;
   let result = await mysql.getArticleList(data);
+  let leng = await mysql.getArticleLength(data);
   let s = await mysql.getBookType();
   if(result.length>0){
-    ctx.body = {article_list:result,article_type:s}
+    ctx.body = {article_list:result,article_type:s,leng:leng}
   }else{
     ctx.body = {addData: false}
   }
