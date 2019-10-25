@@ -128,6 +128,7 @@ class mysqlClass {
           msg = msg.replace(/[|]*\n/, "");
           msg = msg.replace(/&npsp;/gi, "");
           msg = msg.replace(/&nbsp;/gi, "");
+          msg = msg.replace(/&ldquo;/gi, "");
           return msg;
         };
         if(data){
