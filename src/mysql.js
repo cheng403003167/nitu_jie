@@ -129,6 +129,7 @@ class mysqlClass {
           msg = msg.replace(/&npsp;/gi, "");
           msg = msg.replace(/&nbsp;/gi, "");
           msg = msg.replace(/&ldquo;/gi, "");
+          msg = msg.replace(/&rdquo;/gi, "");
           return msg;
         };
         if(data){
