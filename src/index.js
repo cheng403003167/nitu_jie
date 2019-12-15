@@ -107,7 +107,7 @@ router.post('/api/articleConUpdate',async (ctx) => {
   let data = ctx.request.body.forms;
   let arId = ctx.request.body.id;
   let result = await mysql.ArticleUpdate(data,arId);
-  if(result.affectedRows>0){
+  if(result && result.affectedRows && result.affectedRows>0){
     ctx.body = {addData: true}
   }else{
     ctx.body = {addData: false}
@@ -154,12 +154,17 @@ router.post('/api/getArticleConAndType',async (ctx) =>{
   let result = await mysql.getArticleItem(data);
   let prevResult = await mysql.getArticleItemPrev(data);
   let nextResult = await mysql.getArticleItemNext(data);
-  let s = await mysql.getBookType();
+  let getTuijian = await mysql.getTuijian(result[0].type, result[0].id);
+  let s = await mysql.getBookType(result.type, result.id);
   if(result.length>0){
-    ctx.body = {article_con:result,article_prev:prevResult,article_next:nextResult,article_type:s}
+    ctx.body = {article_con:result,article_prev:prevResult,article_next:nextResult,article_type:s,getTuijian:getTuijian}
   }else{
     ctx.body = {addData: false}
   }
+})
+router.get('/api/getTuijian', async (ctx) =>{
+  let getTuijian = await mysql.getTuijian(3);
+  ctx.body = getTuijian
 })
 router.post('/api/getSearchArticleListAndType',async (ctx) =>{
   let data = ctx.request.body.search;
@@ -177,9 +182,9 @@ router.post('/api/getSearchArticleListAndType',async (ctx) =>{
       resArr = resArr.concat(resT);
     }
   }
-  let s = await mysql.getBookType();
+  let ss = await mysql.getBookType();
   if(result.length>0){
-    ctx.body = {article_list:resArr,article_type:s}
+    ctx.body = {article_list:resArr,article_type:ss}
   }else{
     ctx.body = {addData: false}
   }

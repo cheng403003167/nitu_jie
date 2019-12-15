@@ -5,7 +5,7 @@ const pool = mysql.createPool({
   host: 'localhost',
   port: '3306',
   user: 'root',
-  password: 'Cheng3203550)(',
+  password: '3203550Cheng',
   database: 'nitu_data'
 });
 class mysqlClass {
@@ -168,6 +168,49 @@ class mysqlClass {
   getArticleItemNext(data){
     return new Promise((res,rej)=>{
       let SQL = 'SELECT * FROM `article` WHERE `id` =(select min(id) from article where id>'+data+')';
+      pool.query(SQL , (err,result)=>{
+        if(err){
+          console.log(err);
+        }
+        res(result);
+        return result;
+      })
+    })
+  }
+  getTuijian(type,id){
+    return new Promise((res,rej)=>{
+      let SQL = 'SELECT id FROM `article` WHERE `type` ='+type;
+      pool.query(SQL , (err,result)=>{
+        if(err){
+          console.log(err);
+        }
+        res(result);
+      })
+    }).then((res) => {
+      let len = res.length;
+      let tui_id = [];
+      while(true){
+        let temp_id = parseInt(Math.random()*len);
+        if(res[temp_id].id != id && tui_id.indexOf(res[temp_id].id) < 0){
+          tui_id.push(res[temp_id].id);
+        }
+        if(tui_id.length==3){
+          break;
+        }
+      }
+      return tui_id;
+    }).then(async (res)=>{
+      var article_list = [];
+      let s1 = await this.getTuiArticle(res[0]);
+      let s2 = await this.getTuiArticle(res[1]);
+      let s3 = await this.getTuiArticle(res[2]);
+      article_list.push(s1[0], s2[0], s3[0]);
+      return article_list;
+    })
+  }
+  getTuiArticle(id){
+    return new Promise((res,rej)=>{
+      let SQL = 'SELECT id,title,front_img FROM `article` WHERE `id` = "'+id+'"';
       pool.query(SQL , (err,result)=>{
         if(err){
           console.log(err);
