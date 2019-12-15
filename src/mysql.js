@@ -111,13 +111,45 @@ class mysqlClass {
       })
     })
   }
-  getArticleList(data){
+  getArticleList(startP,pages,data){
     return new Promise((res,rej)=>{
       let SQL ='';
       if(!data){
-        SQL = 'SELECT id,front_img,type,title,content FROM article';
+        SQL = 'SELECT id,front_img,type,title,content FROM article WHERE id < '+startP+' ORDER BY id DESC LIMIT 5 ';
       }else{
-        SQL = 'SELECT id,front_img,type,title,content FROM article WHERE type='+parseInt(data);
+        SQL = 'SELECT id,front_img,type,title,content FROM article WHERE type='+parseInt(data)+' ORDER BY id DESC';
+      }
+      pool.query(SQL , (err,result)=>{
+        if(err){
+          console.log(err);
+        }
+        var filterHTMLTag = function(msg) {
+          var msg = msg.replace(/<\/?[^>]*>/g, "");
+          msg = msg.replace(/[|]*\n/, "");
+          msg = msg.replace(/&npsp;/gi, "");
+          msg = msg.replace(/&nbsp;/gi, "");
+          msg = msg.replace(/&ldquo;/gi, "");
+          msg = msg.replace(/&rdquo;/gi, "");
+          return msg;
+        };
+        if(data){
+          result = result.slice((pages-1)*5,(pages-1)*5+5);
+        }
+        result.forEach(function(item) {
+          item.content = filterHTMLTag(item.content).slice(0, 90) + "...";
+        });
+        res(result);
+        return result;
+      })
+    })
+  }
+  getArticleLength(data){
+    return new Promise((res,rej)=>{
+      let SQL ='';
+      if(!data){
+        SQL = 'SELECT COUNT(*) AS leng FROM article';
+      }else{
+        SQL = 'SELECT COUNT(*) AS leng FROM article WHERE type='+parseInt(data);
       }
       pool.query(SQL , (err,result)=>{
         if(err){
@@ -155,7 +187,7 @@ class mysqlClass {
   }
   getArticleItemPrev(data){
     return new Promise((res,rej)=>{
-      let SQL = 'SELECT * FROM `article` WHERE `id` =(select max(id) from article where id<'+data+')';
+      let SQL = 'SELECT id,title FROM `article` WHERE `id` =(select max(id) from article where id<'+data+')';
       pool.query(SQL , (err,result)=>{
         if(err){
           console.log(err);
@@ -167,7 +199,7 @@ class mysqlClass {
   }
   getArticleItemNext(data){
     return new Promise((res,rej)=>{
-      let SQL = 'SELECT * FROM `article` WHERE `id` =(select min(id) from article where id>'+data+')';
+      let SQL = 'SELECT id,title FROM `article` WHERE `id` =(select min(id) from article where id>'+data+')';
       pool.query(SQL , (err,result)=>{
         if(err){
           console.log(err);
