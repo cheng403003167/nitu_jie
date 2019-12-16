@@ -111,11 +111,11 @@ class mysqlClass {
       })
     })
   }
-  getArticleList(startP,pages,data){
+  getArticleList(data,startP,pages){
     return new Promise((res,rej)=>{
       let SQL ='';
       if(!data){
-        SQL = 'SELECT id,front_img,type,title,content FROM article WHERE id < '+startP+' ORDER BY id DESC LIMIT 5 ';
+        SQL = 'SELECT id,front_img,type,title,content FROM article WHERE id < '+startP+' ORDER BY id DESC';
       }else{
         SQL = 'SELECT id,front_img,type,title,content FROM article WHERE type='+parseInt(data)+' ORDER BY id DESC';
       }

@@ -115,7 +115,16 @@ router.post('/api/articleConUpdate',async (ctx) => {
 })
 router.post('/api/getArticleList',async (ctx) =>{
   let data = ctx.request.body.arId;
-  let result = await mysql.getArticleList(data);
+  let pages = ctx.request.body.page || 1;
+  let leng = await mysql.getArticleLength(data);
+  let lastId = leng[0].leng + 5;
+  let startP = 0;
+  if(pages != 1){
+    startP = lastId-(pages-1)*5+1;
+  }else{
+    startP = lastId + 1;
+  }
+  let result = await mysql.getArticleList(data,startP,pages);
   if(result.length>0){
     ctx.body = result
   }else{
@@ -150,7 +159,7 @@ router.post('/api/getArticleListAndType',async (ctx) =>{
   }else{
     startP = lastId + 1;
   }
-  let result = await mysql.getArticleList(startP,pages,data);
+  let result = await mysql.getArticleList(data,startP,pages);
   let s = await mysql.getBookType();
   if(result.length>0){
     ctx.body = {article_list:result,article_type:s,leng:leng[0].leng}
