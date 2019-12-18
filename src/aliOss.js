@@ -5,4 +5,5 @@ const client = new OSS({
   bucket: 'traile',
   endpoint: 'oss-cn-shenzhen.aliyuncs.com'
 });
+// id和密码有保护
 module.exports = client;
