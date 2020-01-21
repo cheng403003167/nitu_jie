@@ -5,7 +5,7 @@ const pool = mysql.createPool({
   host: 'localhost',
   port: '3306',
   user: 'root',
-  password: '3203550Cheng',
+  password: '',
   database: 'nitu_data'
 });
 class mysqlClass {
